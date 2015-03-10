@@ -7,10 +7,7 @@ var HikeSchema = new Schema({
     id: String,
     name: String,
     length: Number,
-    location: {
-        lat: Number,
-        lon: Number
-    },
+    location: [],
     elevGain: Number,
     elevMax: Number,
     desc: String,
@@ -18,6 +15,10 @@ var HikeSchema = new Schema({
     drivingDirections: String,
     numTripReports: Number,
     rating: Number,
+
+    meta: {
+        estFlatDistance: Number
+    },
 
     datasrc: {
         id: String,
