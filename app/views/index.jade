@@ -1,5 +1,77 @@
 extends layout
 
 block content
-  h1= title
-  p Welcome to #{title}
+
+	main
+		//- color background
+		.overlay
+		
+		//- logo
+		#logo
+			.i-logo
+		
+		//- search
+		form#search
+			//- difficulty
+			fieldset
+				.name.i-gauge Difficulty Level
+
+				input(id='difficulty-all', type='radio', name='difficulty', checked='')
+				label(for='difficulty-all') All
+
+				input(id='difficulty-1', type='radio', name='difficulty')
+				label(for='difficulty-1') 1-2
+
+				input(id='difficulty-2', type='radio', name='difficulty')
+				label(for='difficulty-2') 2-3
+
+				input(id='difficulty-3', type='radio', name='difficulty')
+				label(for='difficulty-3') 3-5
+
+			//- distance	
+			fieldset
+				.name.i-map Distance From Me
+
+				input(id='distance-all', type='radio', name='distance', checked='')
+				label(for='distance-all') All
+
+				input(id='distance-1', type='radio', name='distance')
+				label(for='distance-1') 5 mi
+
+				input(id='distance-2', type='radio', name='distance')
+				label(for='distance-2') 5-10
+
+				input(id='distance-3', type='radio', name='distance')
+				label(for='distance-3') 10+
+
+			//- hike length	
+			fieldset
+				.name.i-length Hike Length
+
+				input(id='length-all', type='radio', name='length', checked='')
+				label(for='length-all') All
+
+				input(id='length-1', type='radio', name='length')
+				label(for='length-1') <3 mi
+
+				input(id='length-2', type='radio', name='length')
+				label(for='length-2') 3-8
+
+				input(id='length-3', type='radio', name='length')
+				label(for='length-3') 8+
+
+			//- Elevation Gain	
+			fieldset
+				.name.i-gain Elevation Gain
+
+				input(id='gain-all', type='radio', name='gain', checked='')
+				label(for='gain-all') All
+
+				input(id='gain-1', type='radio', name='gain')
+				label(for='gain-1') <1000 ft
+
+				input(id='gain-2', type='radio', name='gain')
+				label(for='gain-2') 1000-3000
+
+				input(id='gain-3', type='radio', name='gain')
+				label(for='gain-3') 3000+

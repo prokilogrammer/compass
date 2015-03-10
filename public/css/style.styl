@@ -1,6 +1,204 @@
+@import 'normalize'
+@import 'functions'
+
+// color palette
+$main = #a0f000
+$white = #ffffff
+$grey-light = #bec1b8
+$grey-dark = #626d6f
+$black = #393f44
+$dark = #252b30
+
+// responsive breakpoints
+$min-desktop = "only screen and (min-width: " + em(600) + ")"
+
+// z-indexes
+$z-overlay = 0
+
+// type	
+$f-s //details
+	font-size em(14)
+	font-weight 300
+	line-height 1.2
+	
+$f-r //body
+	font-size em(18)
+	font-weight 300
+	line-height 1.4
+	
+$f-h2
+	font-size em(18)
+	font-weight 500
+	line-height 1.2
+	
+$f-h1
+	font-size em(24)
+	font-weight 500
+	line-height 1.2
+	
+$f-xl //highlight
+	font-size em(36)
+	font-weight 500
+	line-height 1.2
+	
+h1, h2, h3, h4, h5, h6
+	margin 0 auto em(10)
+	
+h1
+	@extend $f-h1
+	
+h2
+	@extend $f-h2
+	
+p 
+	@extend $f-r
+	margin 0 auto em(6)
+	
+// global
 body
-  padding 50px
-  font 14px "Lucida Grande", Helvetica, Arial, sans-serif
+	margin 0 auto
+	padding 0
+	font-family Ubuntu, Helvetica, sans-serif
+	font-size 1em
+	line-height 1
+	color $black
+	border-top 1px solid $main
+	overflow-x hidden
+	background $white 
+
+// ui
+ul
+	margin 0 auto
+	padding 0
+	li
+		margin 0 auto
+		padding 0 0 em(8)
 
 a
-  color #00B7FF
+	color inherit
+	text-decoration none
+	
+form
+	position relative
+	label
+		display block
+		color inherit
+
+input, textarea
+	margin 0 auto
+	padding 0
+	color inherit
+	border none
+	border-radius 0  //removes webkit radius
+	background none
+	
+button
+	@extend $f-h2
+	margin 0 auto
+	padding 0
+	text-transform uppercase
+	color inherit
+	border none
+	background none
+
+//custom icons
+@font-face
+	font-family 'compass'
+	src url('../compass.woff') format('woff')
+
+[class^="i-"]:before, [class*=" i-"]:before 
+	margin-right em(6)
+	font-family 'compass'
+	speak none
+	font-style normal
+	font-weight normal
+	font-variant normal
+	text-transform none
+	-webkit-font-smoothing antialiased
+	-moz-osx-font-smoothing grayscale
+	
+.i-logo:before {
+	content: "\e606";
+}
+
+.i-length:before {
+	content: "\e600";
+}
+
+.i-gain:before {
+	content: "\e601";
+}
+
+.i-gauge:before {
+	content: "\e602";
+}
+
+.i-map:before {
+	content: "\e603";
+}
+
+.i-search:before {
+	content: "\e604";
+}
+
+.i-back:before {
+	content: "\e605";
+}
+
+//global
+main
+	position relative
+	min-height 100%
+	padding 0 4%
+	background url(../img/bg.jpg) center / cover fixed
+	overflow-x hidden
+	.overlay
+		position fixed
+		z-index $z-overlay
+		top 0
+		right 0
+		bottom 0
+		left 0
+		background alpha($black, .9)
+		&.splash
+			background alpha($main, .9)
+
+#logo
+	position relative
+	color $white
+	.i-logo
+		font-size 20em
+		text-align center
+		
+	
+#search
+	color $white
+	fieldset
+		margin em(0) auto em(16)
+		.name
+			@extend $f-s
+			margin-bottom em(12)
+		input[type=radio]
+			display none
+			+ label
+				@extend $f-s
+				@extend $cursor
+				display inline-block
+				float left
+				width 24%
+				text-align center
+				margin 0 .5% 1em
+				padding em(8)
+				background-color $dark
+				outline none
+				transition .5s
+				&:first-of-type
+					border-radius em(4) 0 0 em(4)
+				&:last-of-type
+					border-radius 0 em(4) em(4) 0
+			&:checked + label
+				color $black
+				background $white
+			&:checked + label[for*="all"]
+				color $white
+				background $grey-dark

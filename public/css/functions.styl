@@ -1,0 +1,15 @@
+// convert pixels to em's automagically - based on the assumption that 1em = 16px
+em(a)
+  a / 16 + 0em
+  	
+// grid
+$grid
+	position relative
+	display inline-block
+	width 100% //default width for mobile
+	vertical-align top
+	margin-right -.25em
+
+$cursor
+	cursor pointer
+	-webkit-tap-highlight-color rgba(0,0,0,0) // removes touch highlight

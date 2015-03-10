@@ -1,7 +1,333 @@
+html,
 body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  height: 100%;
+  width: 100%;
+}
+body {
+  min-height: 100%;
+}
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+main,
+nav,
+section,
+button,
+img,
+summary {
+  display: block;
+}
+audio,
+canvas,
+video {
+  display: inline-block;
+  *display: inline;
+  *zoom: 1;
+}
+audio:not([controls]) {
+  display: none;
+  height: 0;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  word-wrap: normal;
+}
+ul,
+ol {
+  list-style: none;
+  list-style-image: none;
+}
+pre {
+  white-space: pre;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+sub,
+sup {
+  font-size: 75%;
+  line-height: 0;
+  position: relative;
+  vertical-align: baseline;
+}
+img {
+  max-width: 100%;
+  width: auto 9;
+  height: auto;
+  margin: 0 auto;
+  vertical-align: middle;
+  border: 0;
+  -ms-interpolation-mode: bicubic;
 }
 a {
-  color: #00b7ff;
+  cursor: pointer;
+  outline: none;
+  -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+form {
+  margin: 0;
+  padding: 0;
+}
+fieldset {
+  border: 0;
+  margin: 0;
+  padding: 0;
+}
+legend {
+  border: 0;
+  padding: 0;
+  white-space: normal;
+  *margin-left: -7px;
+}
+input,
+textarea {
+  width: 100%;
+  -webkit-appearance: none;
+}
+textarea {
+  overflow: auto;
+  vertical-align: top;
+  resize: none;
+}
+button,
+input,
+textarea,
+select {
+  font: inherit;
+  outline: none;
+  vertical-align: baseline;
+  *vertical-align: middle;
+  cursor: pointer;
+  -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+button[disabled],
+html input[disabled] {
+  cursor: default;
+}
+button,
+html input[type="button"],
+input[type="reset"],
+input[type="submit"] {
+  -webkit-appearance: button;
+  *overflow: visible;
+}
+input[type="checkbox"],
+input[type="radio"] {
+  padding: 0;
+  *height: 13px;
+  *width: 13px;
+}
+input[type="search"] {
+  -webkit-appearance: textfield;
+}
+input[type="search"]::-webkit-search-cancel-button,
+input[type="search"]::-webkit-search-decoration {
+  -webkit-appearance: none;
+}
+button::-moz-focus-inner,
+input::-moz-focus-inner {
+  border: 0;
+  padding: 0;
+}
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+#search fieldset input[type=radio] + label {
+  cursor: pointer;
+  -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+#search fieldset .name,
+#search fieldset input[type=radio] + label {
+  font-size: 0.875em;
+  font-weight: 300;
+  line-height: 1.2;
+}
+p {
+  font-size: 1.125em;
+  font-weight: 300;
+  line-height: 1.4;
+}
+h2,
+button {
+  font-size: 1.125em;
+  font-weight: 500;
+  line-height: 1.2;
+}
+h1 {
+  font-size: 1.5em;
+  font-weight: 500;
+  line-height: 1.2;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 0 auto 0.625em;
+}
+p {
+  margin: 0 auto 0.375em;
+}
+body {
+  margin: 0 auto;
+  padding: 0;
+  font-family: Ubuntu, Helvetica, sans-serif;
+  font-size: 1em;
+  line-height: 1;
+  color: #393f44;
+  border-top: 1px solid #a0f000;
+  overflow-x: hidden;
+  background: #fff;
+}
+ul {
+  margin: 0 auto;
+  padding: 0;
+}
+ul li {
+  margin: 0 auto;
+  padding: 0 0 0.5em;
+}
+a {
+  color: inherit;
+  text-decoration: none;
+}
+form {
+  position: relative;
+}
+form label {
+  display: block;
+  color: inherit;
+}
+input,
+textarea {
+  margin: 0 auto;
+  padding: 0;
+  color: inherit;
+  border: none;
+  border-radius: 0;
+  background: none;
+}
+button {
+  margin: 0 auto;
+  padding: 0;
+  text-transform: uppercase;
+  color: inherit;
+  border: none;
+  background: none;
+}
+@font-face {
+  font-family: 'compass';
+  src: url("../compass.woff") format('woff');
+}
+[class^="i-"]:before,
+[class*=" i-"]:before {
+  margin-right: 0.375em;
+  font-family: 'compass';
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+.i-logo:before {
+  content: "\e606";
+}
+.i-length:before {
+  content: "\e600";
+}
+.i-gain:before {
+  content: "\e601";
+}
+.i-gauge:before {
+  content: "\e602";
+}
+.i-map:before {
+  content: "\e603";
+}
+.i-search:before {
+  content: "\e604";
+}
+.i-back:before {
+  content: "\e605";
+}
+main {
+  position: relative;
+  min-height: 100%;
+  padding: 0 4%;
+  background: url("../img/bg.jpg") center/cover fixed;
+  overflow-x: hidden;
+}
+main .overlay {
+  position: fixed;
+  z-index: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background: rgba(57,63,68,0.9);
+}
+main .overlay.splash {
+  background: rgba(160,240,0,0.9);
+}
+#logo {
+  position: relative;
+  color: #fff;
+}
+#logo .i-logo {
+  font-size: 20em;
+  text-align: center;
+}
+#search {
+  color: #fff;
+}
+#search fieldset {
+  margin: 0em auto 1em;
+}
+#search fieldset .name {
+  margin-bottom: 0.75em;
+}
+#search fieldset input[type=radio] {
+  display: none;
+}
+#search fieldset input[type=radio] + label {
+  display: inline-block;
+  float: left;
+  width: 24%;
+  text-align: center;
+  margin: 0 0.5% 1em;
+  padding: 0.5em;
+  background-color: #252b30;
+  outline: none;
+  transition: 0.5s;
+}
+#search fieldset input[type=radio] + label:first-of-type {
+  border-radius: 0.25em 0 0 0.25em;
+}
+#search fieldset input[type=radio] + label:last-of-type {
+  border-radius: 0 0.25em 0.25em 0;
+}
+#search fieldset input[type=radio]:checked + label {
+  color: #393f44;
+  background: #fff;
+}
+#search fieldset input[type=radio]:checked + label[for*="all"] {
+  color: #fff;
+  background: #626d6f;
 }
