@@ -8,7 +8,7 @@ var bodyParser = require('body-parser');
 var compress = require('compression');
 var methodOverride = require('method-override');
 
-module.exports = function(app, config) {
+module.exports = function(app, config, db) {
   app.set('views', config.root + '/app/views');
   app.set('view engine', 'jade');
 
@@ -29,7 +29,7 @@ module.exports = function(app, config) {
 
   var controllers = glob.sync(config.root + '/app/controllers/*.js');
   controllers.forEach(function (controller) {
-    require(controller)(app);
+    require(controller)(app, db);
   });
 
   app.use(function (req, res, next) {
