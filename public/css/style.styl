@@ -13,7 +13,7 @@ $dark = #252b30
 $min-desktop = "only screen and (min-width: " + em(600) + ")"
 
 // z-indexes
-$z-overlay = 0
+$z-nav = 100
 
 // type	
 $f-s //details
@@ -22,37 +22,51 @@ $f-s //details
 	line-height 1.2
 	
 $f-r //body
-	font-size em(18)
+	font-size em(18) 
 	font-weight 300
 	line-height 1.4
 	
-$f-h2
+$f-h3
 	font-size em(18)
+	font-weight 500
+	line-height 1.2
+	
+$f-h2
+	font-size em(21)
 	font-weight 500
 	line-height 1.2
 	
 $f-h1
-	font-size em(24)
+	font-size em(26)
 	font-weight 500
 	line-height 1.2
+	text-transform uppercase
 	
 $f-xl //highlight
-	font-size em(36)
+	font-size em(40)
 	font-weight 500
-	line-height 1.2
-	
-h1, h2, h3, h4, h5, h6
-	margin 0 auto em(10)
 	
 h1
 	@extend $f-h1
+	margin 0 auto
 	
 h2
 	@extend $f-h2
+	margin 0 auto
+	
+h3
+	@extend $f-h2
+	margin em(24) auto em(6)
 	
 p 
 	@extend $f-r
-	margin 0 auto em(6)
+	margin 0 auto em(4)
+	
+br
+	display block
+	content ""
+	line-height 2
+	margin .25em 0
 	
 // global
 body
@@ -62,9 +76,10 @@ body
 	font-size 1em
 	line-height 1
 	color $black
-	border-top 1px solid $main
-	overflow-x hidden
 	background $white 
+	border-top 1px solid $main 
+	overflow-x hidden
+	cursor default //removed text select on p
 
 // ui
 ul
@@ -83,6 +98,12 @@ form
 	label
 		display block
 		color inherit
+	[type=submit]
+		width 110%
+		margin-left -5%
+		padding 1em
+		color $white
+		background $main
 
 input, textarea
 	margin 0 auto
@@ -95,11 +116,12 @@ input, textarea
 button
 	@extend $f-h2
 	margin 0 auto
-	padding 0
+	padding .5em .75em
 	text-transform uppercase
 	color inherit
 	border none
 	background none
+	transition .5s
 
 //custom icons
 @font-face
@@ -110,6 +132,7 @@ button
 	margin-right em(6)
 	font-family 'compass'
 	speak none
+	font-size 80%
 	font-style normal
 	font-weight normal
 	font-variant normal
@@ -117,8 +140,56 @@ button
 	-webkit-font-smoothing antialiased
 	-moz-osx-font-smoothing grayscale
 	
-.i-logo:before {
-	content: "\e606";
+.i-sun:before {
+	content: "\e607";
+}
+
+.i-moon:before {
+	content: "\e608";
+}
+
+.i-wind:before {
+	content: "\e609";
+}
+
+.i-cloudy:before {
+	content: "\e60a";
+}
+
+.i-cloud:before {
+	content: "\e60b";
+}
+
+.i-lightning:before {
+	content: "\e60c";
+}
+
+.i-rainy:before {
+	content: "\e60d";
+}
+
+.i-rainy2:before {
+	content: "\e60e";
+}
+
+.i-windy:before {
+	content: "\e60f";
+}
+
+.i-windy2:before {
+	content: "\e610";
+}
+
+.i-snow:before {
+	content: "\e611";
+}
+
+.i-cloudy2:before {
+	content: "\e612";
+}
+
+.i-down:before {
+	content: "\e613";
 }
 
 .i-length:before {
@@ -127,6 +198,10 @@ button
 
 .i-gain:before {
 	content: "\e601";
+}
+
+.i-block:before {
+	content: "\e614";
 }
 
 .i-gauge:before {
@@ -145,17 +220,25 @@ button
 	content: "\e605";
 }
 
+.i-water:before {
+	content: "\e615";
+}
+
+.i-logo:before {
+	content: "\e606";
+}
+
 //global
 main
 	position relative
-	min-height 100%
-	padding 0 4%
+	min-height 100% 
+	padding 0 4% //same as body border-top
 	background url(../img/bg.jpg) center / cover fixed
 	overflow-x hidden
 	.overlay
 		position fixed
 		z-index $z-overlay
-		top 0
+		top 1px //same as body border-top
 		right 0
 		bottom 0
 		left 0
@@ -165,14 +248,21 @@ main
 
 #logo
 	position relative
+	margin-top 5%
 	color $white
 	.i-logo
 		font-size 20em
 		text-align center
+		&:before
+			margin 0
 		
 	
 #search
 	color $white
+	position absolute
+	bottom 0
+	left 4%
+	right @left
 	fieldset
 		margin em(0) auto em(16)
 		.name
@@ -202,3 +292,121 @@ main
 			&:checked + label[for*="all"]
 				color $white
 				background $grey-dark
+
+// search results nav
+nav
+	position fixed
+	z-index $z-nav
+	top 0
+	left 0
+	right 0
+	color $grey-light
+	background $black
+	border-top 1px solid $main //body border-top
+	border-bottom 1px solid $dark
+	#back
+		float left
+		color $white
+		background $main
+		&:before
+			margin 0
+		&:hover, &:focus
+			color $main
+			background $white
+	ul
+		float right
+		margin-right 1em
+		li
+			@extend $f-s
+			@extend $cursor
+			display inline-block
+			padding .825em 0 .5em 1.5em
+			transition .5s
+			&.active
+				color $main
+		&:hover
+			li
+				color $grey-light
+				&:hover, &:focus
+					color $main
+
+#search-results
+	margin-top 2.5em //nav height
+
+.hike
+	border-bottom 2px solid $dark
+	// highlight (top image, name, etc)
+	.img
+		@extend $cursor
+		position relative
+		padding 5% 3em 50% 4%
+		color $white
+		background-size cover
+		backgroun-position center
+		.bg //gradient
+			position absolute
+			top 0
+			right 0
+			bottom 0
+			left 0
+			background: -moz-linear-gradient(top, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0) 75%); /* FF3.6+ */
+			background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(0,0,0,0.5)), color-stop(75%,rgba(0,0,0,0))); /* Chrome,Safari4+ */
+			background: -webkit-linear-gradient(top, rgba(0,0,0,0.5) 0%,rgba(0,0,0,0) 75%); /* Chrome10+,Safari5.1+ */
+			background: -o-linear-gradient(top, rgba(0,0,0,0.5) 0%,rgba(0,0,0,0) 75%); /* Opera 11.10+ */
+			background: -ms-linear-gradient(top, rgba(0,0,0,0.5) 0%,rgba(0,0,0,0) 75%); /* IE10+ */
+			background: linear-gradient(to bottom, rgba(0,0,0,0.5) 0%,rgba(0,0,0,0) 75%); /* W3C */
+		h1
+			position relative
+		.location
+			@extend $f-s
+			position relative
+		.difficulty
+			position absolute
+			top 6%
+			right 4%
+			.numerical
+				@extend $f-xl
+				color $main
+				sup
+					position relative
+					top -1em
+					margin-left .25em
+					color $white
+					font-size 40%
+			.description
+				@extend $f-h3
+				text-transform capitalize
+				margin-top -.125em
+		ul //quick details
+			position absolute
+			bottom 0
+			left 0
+			right 0
+			background alpha($black,.9)
+			transition .5s
+			li
+				display inline-block
+				width 33.333333%
+				text-align center
+				padding .825em 0
+				[class^="i-"], [class*=" i-"] 
+					@extend $f-s
+					color $grey-light
+				.detail
+					@extend $f-h3
+					margin-top .125em
+				&:nth-child(2)
+					border-left 1px solid $dark
+					border-right @border-left
+	&.open
+		.content
+			height auto
+			padding 0 4% 6%
+	// main content (description, etc)
+	.content
+		position relative
+		height 0
+		overflow hidden
+		background $white
+		h3
+			color $main

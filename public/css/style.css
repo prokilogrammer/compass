@@ -146,12 +146,18 @@ table {
   border-collapse: collapse;
   border-spacing: 0;
 }
-#search fieldset input[type=radio] + label {
+#search fieldset input[type=radio] + label,
+nav ul li,
+.hike .img {
   cursor: pointer;
   -webkit-tap-highlight-color: rgba(0,0,0,0);
 }
 #search fieldset .name,
-#search fieldset input[type=radio] + label {
+#search fieldset input[type=radio] + label,
+nav ul li,
+.hike .img .location,
+.hike .img ul li [class^="i-"],
+.hike .img ul li [class*=" i-"] {
   font-size: 0.875em;
   font-weight: 300;
   line-height: 1.2;
@@ -161,27 +167,46 @@ p {
   font-weight: 300;
   line-height: 1.4;
 }
-h2,
-button {
+.hike .img .difficulty .description,
+.hike .img ul li .detail {
   font-size: 1.125em;
   font-weight: 500;
   line-height: 1.2;
 }
-h1 {
-  font-size: 1.5em;
+h2,
+h3,
+button {
+  font-size: 1.3125em;
   font-weight: 500;
   line-height: 1.2;
 }
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  margin: 0 auto 0.625em;
+h1 {
+  font-size: 1.625em;
+  font-weight: 500;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+.hike .img .difficulty .numerical {
+  font-size: 2.5em;
+  font-weight: 500;
+}
+h1 {
+  margin: 0 auto;
+}
+h2 {
+  margin: 0 auto;
+}
+h3 {
+  margin: 1.5em auto 0.375em;
 }
 p {
-  margin: 0 auto 0.375em;
+  margin: 0 auto 0.25em;
+}
+br {
+  display: block;
+  content: "";
+  line-height: 2;
+  margin: 0.25em 0;
 }
 body {
   margin: 0 auto;
@@ -190,9 +215,10 @@ body {
   font-size: 1em;
   line-height: 1;
   color: #393f44;
+  background: #fff;
   border-top: 1px solid #a0f000;
   overflow-x: hidden;
-  background: #fff;
+  cursor: default;
 }
 ul {
   margin: 0 auto;
@@ -213,6 +239,13 @@ form label {
   display: block;
   color: inherit;
 }
+form [type=submit] {
+  width: 110%;
+  margin-left: -5%;
+  padding: 1em;
+  color: #fff;
+  background: #a0f000;
+}
 input,
 textarea {
   margin: 0 auto;
@@ -224,11 +257,12 @@ textarea {
 }
 button {
   margin: 0 auto;
-  padding: 0;
+  padding: 0.5em 0.75em;
   text-transform: uppercase;
   color: inherit;
   border: none;
   background: none;
+  transition: 0.5s;
 }
 @font-face {
   font-family: 'compass';
@@ -239,6 +273,7 @@ button {
   margin-right: 0.375em;
   font-family: 'compass';
   speak: none;
+  font-size: 80%;
   font-style: normal;
   font-weight: normal;
   font-variant: normal;
@@ -246,14 +281,53 @@ button {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-.i-logo:before {
-  content: "\e606";
+.i-sun:before {
+  content: "\e607";
+}
+.i-moon:before {
+  content: "\e608";
+}
+.i-wind:before {
+  content: "\e609";
+}
+.i-cloudy:before {
+  content: "\e60a";
+}
+.i-cloud:before {
+  content: "\e60b";
+}
+.i-lightning:before {
+  content: "\e60c";
+}
+.i-rainy:before {
+  content: "\e60d";
+}
+.i-rainy2:before {
+  content: "\e60e";
+}
+.i-windy:before {
+  content: "\e60f";
+}
+.i-windy2:before {
+  content: "\e610";
+}
+.i-snow:before {
+  content: "\e611";
+}
+.i-cloudy2:before {
+  content: "\e612";
+}
+.i-down:before {
+  content: "\e613";
 }
 .i-length:before {
   content: "\e600";
 }
 .i-gain:before {
   content: "\e601";
+}
+.i-block:before {
+  content: "\e614";
 }
 .i-gauge:before {
   content: "\e602";
@@ -267,6 +341,12 @@ button {
 .i-back:before {
   content: "\e605";
 }
+.i-water:before {
+  content: "\e615";
+}
+.i-logo:before {
+  content: "\e606";
+}
 main {
   position: relative;
   min-height: 100%;
@@ -276,8 +356,8 @@ main {
 }
 main .overlay {
   position: fixed;
-  z-index: 0;
-  top: 0;
+  z-index: $z-overlay;
+  top: 1px;
   right: 0;
   bottom: 0;
   left: 0;
@@ -288,14 +368,22 @@ main .overlay.splash {
 }
 #logo {
   position: relative;
+  margin-top: 5%;
   color: #fff;
 }
 #logo .i-logo {
   font-size: 20em;
   text-align: center;
 }
+#logo .i-logo:before {
+  margin: 0;
+}
 #search {
   color: #fff;
+  position: absolute;
+  bottom: 0;
+  left: 4%;
+  right: 4%;
 }
 #search fieldset {
   margin: 0em auto 1em;
@@ -330,4 +418,136 @@ main .overlay.splash {
 #search fieldset input[type=radio]:checked + label[for*="all"] {
   color: #fff;
   background: #626d6f;
+}
+nav {
+  position: fixed;
+  z-index: 100;
+  top: 0;
+  left: 0;
+  right: 0;
+  color: #bec1b8;
+  background: #393f44;
+  border-top: 1px solid #a0f000;
+  border-bottom: 1px solid #252b30;
+}
+nav #back {
+  float: left;
+  color: #fff;
+  background: #a0f000;
+}
+nav #back:before {
+  margin: 0;
+}
+nav #back:hover,
+nav #back:focus {
+  color: #a0f000;
+  background: #fff;
+}
+nav ul {
+  float: right;
+  margin-right: 1em;
+}
+nav ul li {
+  display: inline-block;
+  padding: 0.825em 0 0.5em 1.5em;
+  transition: 0.5s;
+}
+nav ul li.active {
+  color: #a0f000;
+}
+nav ul:hover li {
+  color: #bec1b8;
+}
+nav ul:hover li:hover,
+nav ul:hover li:focus {
+  color: #a0f000;
+}
+#search-results {
+  margin-top: 2.5em;
+}
+.hike {
+  border-bottom: 2px solid #252b30;
+}
+.hike .img {
+  position: relative;
+  padding: 5% 3em 50% 4%;
+  color: #fff;
+  background-size: cover;
+  backgroun-position: center;
+}
+.hike .img .bg {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background: -moz-linear-gradient(top, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0) 75%); /* FF3.6+ */
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, rgba(0,0,0,0.5)), color-stop(75%, rgba(0,0,0,0))); /* Chrome,Safari4+ */
+  background: -webkit-linear-gradient(top, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0) 75%); /* Chrome10+,Safari5.1+ */
+  background: -o-linear-gradient(top, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0) 75%); /* Opera 11.10+ */
+  background: -ms-linear-gradient(top, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0) 75%); /* IE10+ */
+  background: linear-gradient(to bottom, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0) 75%); /* W3C */
+}
+.hike .img h1 {
+  position: relative;
+}
+.hike .img .location {
+  position: relative;
+}
+.hike .img .difficulty {
+  position: absolute;
+  top: 6%;
+  right: 4%;
+}
+.hike .img .difficulty .numerical {
+  color: #a0f000;
+}
+.hike .img .difficulty .numerical sup {
+  position: relative;
+  top: -1em;
+  margin-left: 0.25em;
+  color: #fff;
+  font-size: 40%;
+}
+.hike .img .difficulty .description {
+  text-transform: capitalize;
+  margin-top: -0.125em;
+}
+.hike .img ul {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(57,63,68,0.9);
+  transition: 0.5s;
+}
+.hike .img ul li {
+  display: inline-block;
+  width: 33.333333%;
+  text-align: center;
+  padding: 0.825em 0;
+}
+.hike .img ul li [class^="i-"],
+.hike .img ul li [class*=" i-"] {
+  color: #bec1b8;
+}
+.hike .img ul li .detail {
+  margin-top: 0.125em;
+}
+.hike .img ul li:nth-child(2) {
+  border-left: 1px solid #252b30;
+  border-right: 1px solid #252b30;
+}
+.hike.open .content {
+  height: auto;
+  padding: 0 4% 6%;
+}
+.hike .content {
+  position: relative;
+  height: 0;
+  overflow: hidden;
+  background: #fff;
+}
+.hike .content h3 {
+  color: #a0f000;
 }
