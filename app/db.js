@@ -40,18 +40,21 @@ module.exports = function(config){
         });
     };
 
-    m.prototype.search = function(params, cb){
+    m.prototype.find = function(params, cb){
         var _this = this;
 
         if (!utils.isValid(params.schema)) {return cb(new Error("Missing params - " + JSON.stringify(params)))}
 
         var model = _this.models[params.schema];
         var queryStream = model
-            .find()
+            .find(params.query || {})
             .select(params.select ? params.select : '')
             .limit(params.limit ? params.limit : 50)
+            .skip(params.skip || 0)
+            .lean(params.lean || false)
             .stream();
 
+        return queryStream;
     };
 
     return m;

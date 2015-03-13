@@ -4,6 +4,7 @@ var async = require('async'),
     config = require('../config/config'),
     Database = require('../app/db')(config);
 
+// db.hikes.ensureIndex({active: 1, length: 1, elevGain: 1, numTripReports: 1, 'meta.estFlatDistance': 1, 'location': "2dsphere"}, {name: "mainindex"});
 
 var estFlatDistance = function(distanceMiles, elevGainFeet){
 
@@ -40,12 +41,22 @@ async.waterfall([
     function(callback){
 
         async.each(hikes, function(hike, cb){
+
+            var active = true;
+            if (!hike.length || !hike.lng || !hike.lat){
+                active = false
+            }
+
             var toInsert = {
 
+                active: active,
                 id: Date.now(),
                 name: hike.name,
                 length: toFloat(hike.length),
-                location: [toFloat(hike.lat), toFloat(hike.lng)],
+                location: {
+                    "type": "Point",
+                    "coordinates": [toFloat(hike.lng), toFloat(hike.lat)]
+                },
                 elevGain: toFloat(hike.elevGain),
                 elevMax: toFloat(hike.elevMax),
                 desc: hike.desc,

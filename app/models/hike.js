@@ -5,9 +5,10 @@ var mongoose = require('mongoose'),
 var HikeSchema = new Schema({
 
     id: String,
+    active: {type: Boolean, default: false},
     name: String,
     length: Number,
-    location: [],
+    location: Schema.Types.Mixed,
     elevGain: Number,
     elevMax: Number,
     desc: String,
