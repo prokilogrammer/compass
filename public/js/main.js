@@ -5,4 +5,9 @@ $(document).ready(function() {
 	  return $(this).toggleClass('open');
 	});
 
+	$('main [type=submit]').on('click', function() {
+		event.preventDefault();
+	  $('main').addClass('searching');
+	});
+
 });

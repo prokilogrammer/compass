@@ -349,10 +349,12 @@ button {
 }
 main {
   position: relative;
+  z-index: 100;
   min-height: 100%;
   padding: 0 4%;
   background: url("../img/bg.jpg") center/cover fixed;
   overflow-x: hidden;
+  transition: transform 0.5s ease-out;
 }
 main .overlay {
   position: fixed;
@@ -365,6 +367,9 @@ main .overlay {
 }
 main .overlay.splash {
   background: rgba(160,240,0,0.9);
+}
+main.searching {
+  transform: translateX(-100%);
 }
 #logo {
   position: relative;
@@ -421,7 +426,7 @@ main .overlay.splash {
 }
 nav {
   position: fixed;
-  z-index: 100;
+  z-index: 80;
   top: 0;
   left: 0;
   right: 0;
@@ -463,6 +468,8 @@ nav ul:hover li:focus {
   color: #a0f000;
 }
 #search-results {
+  position: absolute;
+  top: 0;
   margin-top: 2.5em;
 }
 .hike {

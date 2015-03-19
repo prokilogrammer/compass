@@ -13,7 +13,8 @@ $dark = #252b30
 $min-desktop = "only screen and (min-width: " + em(600) + ")"
 
 // z-indexes
-$z-nav = 100
+$z-main = 100
+$z-nav = 80
 
 // type	
 $f-s //details
@@ -231,10 +232,12 @@ button
 //global
 main
 	position relative
+	z-index $z-main
 	min-height 100% 
 	padding 0 4% //same as body border-top
 	background url(../img/bg.jpg) center / cover fixed
 	overflow-x hidden
+	transition transform .5s ease-out
 	.overlay
 		position fixed
 		z-index $z-overlay
@@ -245,6 +248,8 @@ main
 		background alpha($black, .9)
 		&.splash
 			background alpha($main, .9)
+	&.searching
+		transform translateX(-100%)
 
 #logo
 	position relative
@@ -331,6 +336,8 @@ nav
 					color $main
 
 #search-results
+	position absolute
+	top 0
 	margin-top 2.5em //nav height
 
 .hike
