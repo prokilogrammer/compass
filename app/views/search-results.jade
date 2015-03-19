@@ -14,7 +14,7 @@
                     .i-map Distance
                     - var dist = hike.straightLineDistance + " mi"
                     if hike.googleMapsResults
-                        dist = hike.googleMapsResults.durationText
+                        - dist = hike.googleMapsResults.durationText
                     .detail #{dist}
                 li
                     .i-length Length
@@ -26,10 +26,10 @@
         .content
             //- hike description
             h3 #{hike.name}
-            p #{hike.desc || "no description"}
+            p !{hike.desc || "no description"}
             //- driving directions
             h3 Directions
-            p #{hike.drivingDirections}
+            p !{hike.drivingDirections}
             h3
             p
                 a(href="https://maps.google.com?daddr=#{hike.locationStr}") ROUTE
