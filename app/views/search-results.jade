@@ -12,7 +12,10 @@
             ul
                 li
                     .i-map Distance
-                    .detail #{hike.googleMapsResults.durationText || hike.straightLineDistance + " mi"}
+                    - var dist = hike.straightLineDistance + " mi"
+                    if hike.googleMapsResults
+                        dist = hike.googleMapsResults.durationText
+                    .detail #{dist}
                 li
                     .i-length Length
                     .detail #{hike.length} mi
