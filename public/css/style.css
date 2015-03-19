@@ -351,33 +351,48 @@ main {
   position: relative;
   z-index: 100;
   min-height: 100%;
+  height: 100%;
   padding: 0 4%;
   background: url("../img/bg.jpg") center/cover fixed;
   overflow-x: hidden;
-  transition: transform 0.5s ease-out;
+  transition: 0.5s ease-out 0s;
 }
 main .overlay {
-  position: fixed;
-  z-index: $z-overlay;
-  top: 1px;
+  position: absolute;
+  top: 0;
   right: 0;
   bottom: 0;
   left: 0;
   background: rgba(57,63,68,0.9);
+  transition: 0.5s;
 }
 main .overlay.splash {
   background: rgba(160,240,0,0.9);
 }
 main.searching {
-  transform: translateX(-100%);
+  min-height: 0;
+  height: 0;
+  transition-delay: 1s;
+}
+main.searching .overlay {
+  background: rgba(160,240,0,0.9);
+}
+main.searching #logo {
+  top: 50%;
+  margin-top: -7em;
+}
+main.searching #search {
+  opacity: 0;
 }
 #logo {
   position: relative;
+  top: 0;
   margin-top: 5%;
   color: #fff;
+  transition: 1s;
 }
 #logo .i-logo {
-  font-size: 20em;
+  font-size: 14em;
   text-align: center;
 }
 #logo .i-logo:before {
@@ -389,6 +404,7 @@ main.searching {
   bottom: 0;
   left: 4%;
   right: 4%;
+  transition: 0.5s;
 }
 #search fieldset {
   margin: 0em auto 1em;
@@ -479,7 +495,7 @@ nav ul:hover li:focus {
 }
 .hike .img {
   position: relative;
-  padding: 5% 3em 50% 4%;
+  padding: 5% 6em 50% 4%;
   color: #fff;
   background-size: cover;
   background-position: center bottom;

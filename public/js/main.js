@@ -1,18 +1,37 @@
 $(document).ready(function() {
 
-	// animation to search for hikes
+	// search for hikes
 	$('main [type=submit]').on('click', function() {
 		event.preventDefault();
 	  $('main').addClass('searching');
+
+	  var difficulty = $('#search [name=difficulty]:checked').val();
+	  var drivingDuration = $('#search [name=drivingDuration]:checked').val();
+	  var length = $('#search [name=length]:checked').val();
+	  var elevGain = $('#search [name=elevGain]:checked').val();
+
+	  $.get('/search-results', {
+	  	difficulty: difficulty,
+	  	drivingDuration: drivingDuration,
+	  	length: length,
+	  	elevGain: elevGain
+	  }, function(data, textStatus, xhr) {
+
+	  	$('#search-results').append(data);
+
+	  });
+	  
+
 	});
 
 	// back button to search again
 	$('#back').on('click', function() {
 	  $('main').removeClass('searching');
+	  $('#search-results').empty();
 	});
 
 	// expand hike on click to show description
-	$('.hike').on('click', function() {
+	$('#search-results').on('click', '.hike', function() {
 
 		// do not open if its already open
 		if ( $(this).hasClass('open')) {
