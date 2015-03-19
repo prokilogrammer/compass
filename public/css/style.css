@@ -450,11 +450,10 @@ nav #back:focus {
 }
 nav ul {
   float: right;
-  margin-right: 1em;
 }
 nav ul li {
   display: inline-block;
-  padding: 0.825em 0 0.5em 1.5em;
+  padding: 1.0625em 1.5em 1.0625em 0;
   transition: 0.5s;
 }
 nav ul li.active {
@@ -470,17 +469,20 @@ nav ul:hover li:focus {
 #search-results {
   position: absolute;
   top: 0;
-  margin-top: 2.5em;
+  left: 0;
+  right: 0;
+  margin-top: 3em;
 }
 .hike {
   border-bottom: 2px solid #252b30;
+  overflow: hidden;
 }
 .hike .img {
   position: relative;
   padding: 5% 3em 50% 4%;
   color: #fff;
   background-size: cover;
-  backgroun-position: center;
+  background-position: center bottom;
 }
 .hike .img .bg {
   position: absolute;
@@ -488,6 +490,7 @@ nav ul:hover li:focus {
   right: 0;
   bottom: 0;
   left: 0;
+  transition: 1s;
   background: -moz-linear-gradient(top, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0) 75%); /* FF3.6+ */
   background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, rgba(0,0,0,0.5)), color-stop(75%, rgba(0,0,0,0))); /* Chrome,Safari4+ */
   background: -webkit-linear-gradient(top, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0) 75%); /* Chrome10+,Safari5.1+ */
@@ -526,7 +529,7 @@ nav ul:hover li:focus {
   left: 0;
   right: 0;
   background: rgba(57,63,68,0.9);
-  transition: 0.5s;
+  transition: 0.25s;
 }
 .hike .img ul li {
   display: inline-block;
@@ -545,16 +548,32 @@ nav ul:hover li:focus {
   border-left: 1px solid #252b30;
   border-right: 1px solid #252b30;
 }
-.hike.open .content {
-  height: auto;
-  padding: 0 4% 6%;
+.hike.open .bg {
+  transform: translateY(-100%);
+}
+.hike.open ul {
+  color: #626d6f;
+  background: rgba(255,255,255,0.9);
+}
+.hike.open .content h3,
+.hike.open .content p {
+  transform: translateY(0);
+  opacity: 1;
 }
 .hike .content {
+  display: none;
   position: relative;
-  height: 0;
   overflow: hidden;
+  padding: 0 4% 6%;
   background: #fff;
 }
 .hike .content h3 {
   color: #a0f000;
+  transform: translateY(-20%);
+  transition: 1.5s ease-out;
+}
+.hike .content p {
+  opacity: 0;
+  transform: translateY(10%);
+  transition: transform 0.75s ease-out, opacity 2s;
 }
