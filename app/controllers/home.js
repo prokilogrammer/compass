@@ -26,7 +26,7 @@ module.exports = function (app, db) {
 
     // Avg hiking speed: 3.1mph
     // Easy hikes are 2hrs round trip = 3.1*2 = 6.2miles flat
-    // moderate hikes are 2 to 6hrs round trip => 6.2miles to 6*3.1 = 18.6miles
+    // medium hikes are 2 to 6hrs round trip => 6.2miles to 6*3.1 = 18.6miles
     // hard hikes are >6hrs round trip => > 18.6miles
     var addDifficultyCondition = function(difficulty, query){
 
@@ -35,7 +35,7 @@ module.exports = function (app, db) {
                 query['meta.estFlatDistance'] = {$lte: 6.2};
                 break;
 
-            case "moderate":
+            case "medium":
                 query['meta.estFlatDistance'] = {$gt: 6.2, $lte: 18.6};
                 break;
 
@@ -73,7 +73,7 @@ module.exports = function (app, db) {
 
 
                 if (flat < 6.2) diffText = 'easy'
-                else if (flat < 18.6) diffText = 'moderate'
+                else if (flat < 18.6) diffText = 'medium'
                 else diffText = 'hard';
 
                 hike.difficultyNumber = diffNum;
@@ -94,7 +94,7 @@ module.exports = function (app, db) {
         return hikes;
     };
 
-    var addDrivingDurationCondition = function(currentLocation, maxDriveDuration, query){
+    var addDrivingDurationCondition = function(currentLocation, minDrivingDuration, maxDriveDuration, query){
 
         // Assuming fastest one can get from their location to destination is 70mph,
         // the hike must be within 70*maxDriveDuration miles from their current location.
@@ -103,7 +103,8 @@ module.exports = function (app, db) {
         if (!utils.isValid(currentLocation)) {throw new Error("Invalid user current location")}
 
         var milesToMeters = 1609.34;
-        var distMeters = (maxDriveDuration * 70) * milesToMeters;
+        var maxDistMeters = (maxDriveDuration * 70) * milesToMeters;
+        var minDistMeters = (minDrivingDuration * 70) * milesToMeters;
         query['location'] = {
             $near: {
                 $geometry: {
@@ -111,7 +112,8 @@ module.exports = function (app, db) {
                     coordinates: [ currentLocation.lng , currentLocation.lat ]
                 },
 
-                $maxDistance: distMeters
+                $maxDistance: maxDistMeters,
+                $minDistance: minDistMeters
             }
         };
 
@@ -224,6 +226,7 @@ module.exports = function (app, db) {
 
             var durationHrs = hike.googleMapsResults.durationSeconds / 3600;
 
+            console.log(filter.min, filter.max, durationHrs);
             var result = true;
             if (filter.min){
                 result = result && (durationHrs > filter.min);
@@ -282,8 +285,9 @@ module.exports = function (app, db) {
         if (req.query.drivingDuration && userLoc){
 
             drivingDuration = parseMinMaxQuery(req.query.drivingDuration);
-            var max = drivingDuration.max ? drivingDuration.max : drivingDuration.min;
-            query = addDrivingDurationCondition(userLoc, max, query);
+            var min = drivingDuration.min ? drivingDuration.min : 0;
+            var max = drivingDuration.max ? drivingDuration.max : 1000;
+            query = addDrivingDurationCondition(userLoc, min, max, query);
         }
 
         console.log(userIp);
