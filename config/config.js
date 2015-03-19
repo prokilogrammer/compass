@@ -28,8 +28,8 @@ var config = {
     app: {
       name: 'compass'
     },
-    port: 3000,
-    db: 'mongodb://localhost/compass-production',
+    port: process.env.PORT || 3000,
+    db: process.env.MONGOURL || 'mongodb://heroku_app35041145:cmqb5qdoedag5fl2a1ts5pfo8i@ds045021.mongolab.com:45021/heroku_app35041145',
     googleApiKey: "AIzaSyAYpKMEph6yhHUgQdw0K75NY51UB_vIeaQ"
   }
 };
