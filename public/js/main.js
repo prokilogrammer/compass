@@ -3,31 +3,47 @@ $(document).ready(function() {
 	// search for hikes
 	$('main [type=submit]').on('click', function() {
 		event.preventDefault();
-	  $('main').addClass('searching');
 
-	  var difficulty = $('#search [name=difficulty]:checked').val();
-	  var drivingDuration = $('#search [name=drivingDuration]:checked').val();
-	  var length = $('#search [name=length]:checked').val();
-	  var elevGain = $('#search [name=elevGain]:checked').val();
+		// animate main screen
+		$('main').addClass('searching');
 
-	  $.get('/search-results', {
-	  	difficulty: difficulty,
-	  	drivingDuration: drivingDuration,
-	  	length: length,
-	  	elevGain: elevGain
-	  }, function(data, textStatus, xhr) {
+		// get values from form
+		var difficulty = $('#search [name=difficulty]:checked').val();
+		var drivingDuration = $('#search [name=drivingDuration]:checked').val();
+		var length = $('#search [name=length]:checked').val();
+		var elevGain = $('#search [name=elevGain]:checked').val();
 
-	  	$('#search-results').append(data);
+		// AJAX results into #search-results container
+		$.get('/search-results', {
+			difficulty: difficulty,
+			drivingDuration: drivingDuration,
+			length: length,
+			elevGain: elevGain
+		}, function(data, textStatus, xhr) {
 
-	  });
-	  
+			$('#search-results').append(data);
+
+		});
 
 	});
 
+	// sort hikes
+	$('#sort').on('click', function() {
+		$('nav').toggleClass('sorting');
+		$('li', this).removeClass('active');
+	});
+
+
 	// back button to search again
 	$('#back').on('click', function() {
-	  $('main').removeClass('searching');
-	  $('#search-results').empty();
+
+		$('main').removeClass('searching');
+
+		// remove current searches from dom
+		setTimeout(function() {
+			$('#search-results').empty();
+		}, 750); // same time as main transition on css
+
 	});
 
 	// expand hike on click to show description
@@ -35,21 +51,25 @@ $(document).ready(function() {
 
 		// do not open if its already open
 		if ( $(this).hasClass('open')) {
-			return false;
+			$(this).removeClass('open');
+			$('.content', this).slideUp(250);
 		}
 
-		// collapse other hikes
-		$('.hike').removeClass('open');
-		$('.hike .content').slideUp(500);
+		else {
 
-		// show clicked hike
-		$('.content', this).slideDown(500);
-		$(this).addClass('open');
+			// collapse other hikes
+			$('.hike').removeClass('open');
 
-		// // scroll to clicked hike
-		// $('html, body').animate({
-	 //        scrollTop: $(".hike.open").offset().top - 48
-	 //    }, 1000);
+			// show clicked hike
+			$('.content', this).slideDown(500);
+			$(this).addClass('open');
+
+		}
+
+		// scroll to clicked hike
+		$('html, body').animate({
+	        scrollTop: $(".hike.open").offset().top - 48
+	    }, 1000);
 
 	});
 

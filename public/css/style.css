@@ -153,31 +153,31 @@ nav ul li,
   -webkit-tap-highlight-color: rgba(0,0,0,0);
 }
 #search fieldset .name,
-#search fieldset input[type=radio] + label,
-nav ul li,
 .hike .img .location,
 .hike .img ul li [class^="i-"],
 .hike .img ul li [class*=" i-"] {
+  font-size: 0.75em;
+  font-weight: 300;
+  line-height: 1.2;
+}
+#search fieldset input[type=radio] + label,
+nav ul li {
   font-size: 0.875em;
   font-weight: 300;
   line-height: 1.2;
 }
-p {
-  font-size: 1.125em;
-  font-weight: 300;
-  line-height: 1.4;
-}
+p,
 .hike .img .difficulty .description,
 .hike .img ul li .detail {
-  font-size: 1.125em;
-  font-weight: 500;
-  line-height: 1.2;
+  font-size: 1em;
+  font-weight: 300;
+  line-height: 1.4;
 }
 h2,
 h3,
 button {
   font-size: 1.3125em;
-  font-weight: 500;
+  font-weight: 300;
   line-height: 1.2;
 }
 h1 {
@@ -215,8 +215,7 @@ body {
   font-size: 1em;
   line-height: 1;
   color: #393f44;
-  background: #fff;
-  border-top: 1px solid #a0f000;
+  background: #393f44;
   overflow-x: hidden;
   cursor: default;
 }
@@ -242,9 +241,8 @@ form label {
 form [type=submit] {
   width: 110%;
   margin-left: -5%;
-  padding: 1em;
+  padding: 0.75em 1em;
   color: #fff;
-  background: #a0f000;
 }
 input,
 textarea {
@@ -270,14 +268,9 @@ button {
 }
 [class^="i-"]:before,
 [class*=" i-"]:before {
-  margin-right: 0.375em;
+  margin-right: 0.25em;
   font-family: 'compass';
-  speak: none;
-  font-size: 80%;
-  font-style: normal;
-  font-weight: normal;
-  font-variant: normal;
-  text-transform: none;
+  font-size: 85%;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -348,48 +341,49 @@ button {
   content: "\e606";
 }
 main {
-  position: relative;
+  position: fixed;
   z-index: 100;
-  min-height: 100%;
-  height: 100%;
-  padding: 0 4%;
-  background: url("../img/bg.jpg") center/cover fixed;
-  overflow-x: hidden;
-  transition: 0.5s ease-out 0s;
-}
-main .overlay {
-  position: absolute;
   top: 0;
   right: 0;
   bottom: 0;
   left: 0;
-  background: rgba(57,63,68,0.9);
-  transition: 0.5s;
+  height: 100%;
+  padding: 0 4%;
+  overflow-x: hidden;
+  background: url("../img/bg.jpg") center/cover fixed;
+  transition: 0.75s ease-out 0s;
 }
-main .overlay.splash {
-  background: rgba(160,240,0,0.9);
+main .overlay {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: 3.5em;
+  background: #92f000;
 }
 main.searching {
-  min-height: 0;
   height: 0;
-  transition-delay: 1s;
+  transition-delay: 0.75s;
 }
 main.searching .overlay {
-  background: rgba(160,240,0,0.9);
+  height: 100%;
+  transition: 0.75s ease-out;
 }
 main.searching #logo {
-  top: 50%;
-  margin-top: -7em;
+  opacity: 0;
+  top: -1em;
+  transition-delay: 0;
 }
 main.searching #search {
   opacity: 0;
+  transition: 0.25s;
 }
 #logo {
   position: relative;
   top: 0;
   margin-top: 5%;
   color: #fff;
-  transition: 1s;
+  transition: 1s 0.25s;
 }
 #logo .i-logo {
   font-size: 14em;
@@ -404,7 +398,6 @@ main.searching #search {
   bottom: 0;
   left: 4%;
   right: 4%;
-  transition: 0.5s;
 }
 #search fieldset {
   margin: 0em auto 1em;
@@ -424,7 +417,6 @@ main.searching #search {
   padding: 0.5em;
   background-color: #252b30;
   outline: none;
-  transition: 0.5s;
 }
 #search fieldset input[type=radio] + label:first-of-type {
   border-radius: 0.25em 0 0 0.25em;
@@ -447,40 +439,69 @@ nav {
   left: 0;
   right: 0;
   color: #bec1b8;
-  background: #393f44;
-  border-top: 1px solid #a0f000;
-  border-bottom: 1px solid #252b30;
+  background: #252b30;
+  border-top: 1px solid #92f000;
+  border-bottom: 1px solid #393f44;
 }
 nav #back {
   float: left;
-  color: #fff;
-  background: #a0f000;
+  color: #92f000;
 }
 nav #back:before {
   margin: 0;
 }
 nav #back:hover,
 nav #back:focus {
-  color: #a0f000;
-  background: #fff;
+  background: #393f44;
 }
 nav ul {
-  float: right;
+  position: absolute;
+  right: 0;
+  transition: 0.5s;
 }
 nav ul li {
   display: inline-block;
-  padding: 1.0625em 1.5em 1.0625em 0;
   transition: 0.5s;
+  opacity: 0;
+  width: 0;
+}
+nav ul li.help {
+  opacity: 1;
+  width: auto;
+  padding: 1.125em 0 1.125em 1em;
+  color: #626d6f;
+  transition: 0;
 }
 nav ul li.active {
-  color: #a0f000;
+  opacity: 1;
+  width: auto;
+  color: #92f000;
+  padding: 1.125em 1.125em 1.125em 0.5em;
 }
-nav ul:hover li {
-  color: #bec1b8;
+nav ul:hover {
+  background: #393f44;
 }
-nav ul:hover li:hover,
-nav ul:hover li:focus {
-  color: #a0f000;
+nav.sorting #back {
+  transform: translateX(-100%);
+  -webkit-transform: translateX(-100%);
+}
+nav.sorting ul {
+  background: none;
+  right: 0.5em;
+}
+nav.sorting li {
+  opacity: 1;
+  width: auto;
+  padding: 1.125em 0.75em;
+}
+nav.sorting li:hover {
+  color: #92f000;
+  background: #393f44;
+}
+nav.sorting li.help {
+  opacity: 0;
+  padding: 0;
+  width: 0;
 }
 #search-results {
   position: absolute;
@@ -495,6 +516,7 @@ nav ul:hover li:focus {
 }
 .hike .img {
   position: relative;
+  min-height: 19em;
   padding: 5% 6em 50% 4%;
   color: #fff;
   background-size: cover;
@@ -524,20 +546,23 @@ nav ul:hover li:focus {
   position: absolute;
   top: 6%;
   right: 4%;
+  text-align: right;
 }
 .hike .img .difficulty .numerical {
-  color: #a0f000;
+  color: #92f000;
 }
 .hike .img .difficulty .numerical sup {
   position: relative;
-  top: -1em;
-  margin-left: 0.25em;
+  top: -1.25em;
+  margin-left: 0.125em;
   color: #fff;
-  font-size: 40%;
+  font-size: 35%;
+  font-weight: 300;
 }
 .hike .img .difficulty .description {
+  text-align: center;
   text-transform: capitalize;
-  margin-top: -0.125em;
+  margin-top: -0.25em;
 }
 .hike .img ul {
   position: absolute;
@@ -545,36 +570,44 @@ nav ul:hover li:focus {
   left: 0;
   right: 0;
   background: rgba(57,63,68,0.9);
-  transition: 0.25s;
+  transition: background 1s;
 }
 .hike .img ul li {
   display: inline-block;
   width: 33.333333%;
   text-align: center;
-  padding: 0.825em 0;
+  padding: 0.8125em 0 0.625em;
+  transition: 1s;
 }
 .hike .img ul li [class^="i-"],
 .hike .img ul li [class*=" i-"] {
   color: #bec1b8;
 }
-.hike .img ul li .detail {
-  margin-top: 0.125em;
-}
 .hike .img ul li:nth-child(2) {
   border-left: 1px solid #252b30;
   border-right: 1px solid #252b30;
+  transition: 1s;
 }
 .hike.open .bg {
   transform: translateY(-100%);
+  -webkit-transform: translateY(-100%);
 }
 .hike.open ul {
-  color: #626d6f;
   background: rgba(255,255,255,0.9);
+}
+.hike.open ul li {
+  color: #626d6f;
+}
+.hike.open ul li [class^="i-"],
+.hike.open ul li [class*=" i-"] {
+  color: #626d6f;
+}
+.hike.open ul li:nth-child(2) {
+  border-color: #fff !important;
 }
 .hike.open .content h3,
 .hike.open .content p {
   transform: translateY(0);
-  opacity: 1;
 }
 .hike .content {
   display: none;
@@ -584,12 +617,11 @@ nav ul:hover li:focus {
   background: #fff;
 }
 .hike .content h3 {
-  color: #a0f000;
-  transform: translateY(-20%);
-  transition: 1.5s ease-out;
+  color: #92f000;
+  transform: translateY(-1em);
+  transition: 1s ease-out;
 }
 .hike .content p {
-  opacity: 0;
-  transform: translateY(10%);
-  transition: transform 0.75s ease-out, opacity 2s;
+  transform: translateY(1em);
+  transition: transform 1s ease-out;
 }
