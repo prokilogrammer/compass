@@ -12,7 +12,7 @@
             ul
                 li
                     .i-map Distance
-                    .detail #{hike.drivingDuration}
+                    .detail #{hike.googleMapsResults.durationText || hike.straightLineDistance + " mi"}
                 li
                     .i-length Length
                     .detail #{hike.length} mi
@@ -27,3 +27,7 @@
             //- driving directions
             h3 Directions
             p #{hike.drivingDirections}
+            h3
+            p
+                a(href="https://maps.google.com?daddr=#{hike.locationStr}") ROUTE
+

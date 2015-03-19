@@ -7,6 +7,7 @@ var express = require('express'),
   config = require('../../config/config'),
   querystring = require('querystring'),
   request = require('request'),
+  geolib = require('geolib'),
   mongoose = require('mongoose');
 
 module.exports = function (app, db) {
@@ -84,7 +85,16 @@ module.exports = function (app, db) {
         return hikes;
     };
 
-    addDrivingDurationCondition = function(currentLocation, maxDriveDuration, query){
+    var addHikeLocationStr = function(hikes){
+        _.forEach(hikes, function(hike){
+            if (!hike.location || !hike.location.coordinates) return;
+            hike.locationStr = hike.location.coordinates[1] + "," + hike.location.coordinates[0];
+        });
+
+        return hikes;
+    };
+
+    var addDrivingDurationCondition = function(currentLocation, maxDriveDuration, query){
 
         // Assuming fastest one can get from their location to destination is 70mph,
         // the hike must be within 70*maxDriveDuration miles from their current location.
@@ -144,12 +154,28 @@ module.exports = function (app, db) {
         })
     };
 
+    var METERS_TO_MILES = 0.000621371;
+    var addStraightLineDistance = function(hikes, userLoc){
+
+        _.forEach(hikes, function(hike){
+
+            if (!hike.location || !hike.location.coordinates) return;
+
+            var distMeters = geolib.getDistance({latitude: hike.location.coordinates[1], longitude: hike.location.coordinates[0]},
+                {latitude: userLoc.lat, longitude: userLoc.lng});
+
+            hike.straightLineDistance = distMeters * METERS_TO_MILES;
+        });
+
+        return hikes;
+    };
+
     var getDrivingDistance = function(hikes, userIp, userLoc, callback){
         // All hikes will have lat/lng data
 
-        var METERS_TO_MILES = 0.000621371;
-
         if (!userLoc) return callback(null, hikes);
+
+        hikes = addStraightLineDistance(hikes, userLoc);
 
         // Format: lat,lng|lat,lng|lat,lng
         var origin = _.map(hikes, function(hike){return hike.location.coordinates[1] + "," + hike.location.coordinates[0]}).join('|');
@@ -305,6 +331,7 @@ module.exports = function (app, db) {
             function(hikes, callback){
                 // Add more data points for search results page to display
                 addDifficultyDataToResults(hikes);
+                addHikeLocationStr(hikes);
                 callback(null, hikes);
             }
         ],
