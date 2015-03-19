@@ -51,6 +51,36 @@ module.exports = function (app, db) {
         return query;
     };
 
+    var addDifficultyDataToResults = function(hikes){
+
+        _.forEach(hikes, function(hike){
+            hike.difficultyNumber = '-';
+            hike.difficultyText = 'unknown difficulty';
+            if (hike.meta && hike.meta.estFlatDistance){
+
+                var flat = hike.meta.estFlatDistance;
+                var diffNum, diffText;
+
+                if (flat < 3.1) diffNum = 1;
+                else if (flat < 6.2) diffNum = 2;
+                else if (flat < 12.4) diffNum = 3;
+                else if (flat < 18.6) diffNum = 4;
+                else diffNum = 5;
+
+
+                if (flat < 6.2) diffText = 'easy'
+                else if (flat < 18.6) diffText = 'moderate'
+                else diffText = 'hard';
+
+                hike.difficultyNumber = diffNum;
+                hike.difficultyText = diffText;
+            }
+
+        });
+
+        return hikes;
+    };
+
     addDrivingDurationCondition = function(currentLocation, maxDriveDuration, query){
 
         // Assuming fastest one can get from their location to destination is 70mph,
@@ -85,7 +115,7 @@ module.exports = function (app, db) {
         return result;
     };
 
-    router.get('/search', function (req, res, next) {
+    router.get('/search-results', function (req, res, next) {
 
         var ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
         // When there are multiple proxies, they add the IPs to the forwareded header. Grab the first one
@@ -163,6 +193,12 @@ module.exports = function (app, db) {
                 // Call Google and get driving directions.
                 callback(null, hikes);
 
+            },
+
+            function(hikes, callback){
+                // Add more data points for search results page to display
+                addDifficultyDataToResults(hikes);
+                callback(null, hikes);
             }
         ],
         function(err, hikes){
@@ -170,7 +206,7 @@ module.exports = function (app, db) {
                 return next(err)
             }
 
-            res.render('search', {
+            res.render('search-results', {
                 hikes: hikes
             });
         });
