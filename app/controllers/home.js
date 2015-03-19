@@ -4,6 +4,10 @@ var express = require('express'),
   utils = require('../utils'),
   geoip = require('../../geoip-lite'),
   async = require('async'),
+  config = require('../../config/config'),
+  querystring = require('querystring'),
+  request = require('request'),
+  geolib = require('geolib'),
   mongoose = require('mongoose');
 
 module.exports = function (app, db) {
@@ -81,7 +85,16 @@ module.exports = function (app, db) {
         return hikes;
     };
 
-    addDrivingDurationCondition = function(currentLocation, maxDriveDuration, query){
+    var addHikeLocationStr = function(hikes){
+        _.forEach(hikes, function(hike){
+            if (!hike.location || !hike.location.coordinates) return;
+            hike.locationStr = hike.location.coordinates[1] + "," + hike.location.coordinates[0];
+        });
+
+        return hikes;
+    };
+
+    var addDrivingDurationCondition = function(currentLocation, maxDriveDuration, query){
 
         // Assuming fastest one can get from their location to destination is 70mph,
         // the hike must be within 70*maxDriveDuration miles from their current location.
@@ -115,17 +128,127 @@ module.exports = function (app, db) {
         return result;
     };
 
+    var googleMapsDistance = function(origin, dest, userIp, callback){
+
+        var url = "https://maps.googleapis.com/maps/api/distancematrix/json?" + querystring.stringify({
+            key: config.googleApiKey,
+            units: 'imperial',
+            origins: origin,
+            destinations: dest,
+            userIp: userIp
+        });
+
+        console.log(url);
+
+        request.get(url, function(err, resp, body){
+            if (err) return callback(err);
+
+            if (resp.statusCode == 200){
+                return callback(null, JSON.parse(body));
+            }
+
+            // something is wrong
+            err = new Error(body);
+            err.code = resp.statusCode;
+            return callback(err, body);
+        })
+    };
+
+    var METERS_TO_MILES = 0.000621371;
+    var addStraightLineDistance = function(hikes, userLoc){
+
+        _.forEach(hikes, function(hike){
+
+            if (!hike.location || !hike.location.coordinates) return;
+
+            var distMeters = geolib.getDistance({latitude: hike.location.coordinates[1], longitude: hike.location.coordinates[0]},
+                {latitude: userLoc.lat, longitude: userLoc.lng});
+
+            hike.straightLineDistance = distMeters * METERS_TO_MILES;
+        });
+
+        return hikes;
+    };
+
+    var getDrivingDistance = function(hikes, userIp, userLoc, callback){
+        // All hikes will have lat/lng data
+
+        if (!userLoc) return callback(null, hikes);
+
+        hikes = addStraightLineDistance(hikes, userLoc);
+
+        // Format: lat,lng|lat,lng|lat,lng
+        var origin = _.map(hikes, function(hike){return hike.location.coordinates[1] + "," + hike.location.coordinates[0]}).join('|');
+        var dest = userLoc.lat + "," + userLoc.lng;
+
+        googleMapsDistance(origin, dest, userIp, function(err, results){
+
+                if (err || results.status != "OK") {
+                    console.log("Google maps returned error: ", err, results.status);
+                    return callback(err || new Error("GOOGLE MAPS STATUS " + results.status));
+                }
+
+                _.forEach(hikes, function(hike, index){
+
+                    var element = results.rows[index].elements[0];
+                    if (element.status != "OK") return;
+
+                    hike.googleMapsResults = {
+                        hikeAddress: results.origin_addresses[index],
+                        distanceMeters: element.distance.value,
+                        distanceMiles: (element.distance.value * METERS_TO_MILES).toFixed(2),
+                        durationSeconds: element.duration.value,
+                        durationText: element.duration.text
+                    }
+                });
+
+                console.log("Google maps returns ", hikes.length);
+                callback(null, hikes);
+        });
+    };
+
+    var filterByDrivingDuration = function(hikes, filter){
+
+        if (!filter || (!filter.min && !filter.max)){
+            console.log("NO driving duration filter");
+            return hikes;
+        }
+
+        return _.filter(hikes, function(hike){
+
+            // Don't Include hikes that don't have results from Google maps
+            if (!_.has(hike, 'googleMapsResults')) {
+                console.log("Hike " + hike.id + " doesn't have google maps results");
+                return false;
+            }
+
+            var durationHrs = hike.googleMapsResults.durationSeconds / 3600;
+
+            var result = true;
+            if (filter.min){
+                result = result && (durationHrs > filter.min);
+            }
+
+            if (filter.max){
+                result = result && (durationHrs < filter.max);
+            }
+
+            return result;
+        })
+
+    };
+
     router.get('/search-results', function (req, res, next) {
 
-        var ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+        var userIp = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
         // When there are multiple proxies, they add the IPs to the forwareded header. Grab the first one
-        if (!_.isUndefined(ip) || !_.isNull(ip) || ip.indexOf(',') > -1)
-            ip = ip.split(',')[0];
+        if (!_.isUndefined(userIp) || !_.isNull(userIp) || userIp.indexOf(',') > -1)
+            userIp = userIp.split(',')[0];
 
-        var locresult = geoip.lookup(ip);
-        var clientLoc = null;
+        var locresult = geoip.lookup(userIp);
+        var userLoc = null;
         if (locresult){
-            clientLoc = {lat: locresult.ll[0], lng: locresult.ll[1]};
+            userLoc = {lat: locresult.ll[0], lng: locresult.ll[1]};
         }
 
         var query = {
@@ -156,15 +279,15 @@ module.exports = function (app, db) {
         }
 
         var drivingDuration = null;
-        if (req.query.drivingDuration && clientLoc){
+        if (req.query.drivingDuration && userLoc){
 
             drivingDuration = parseMinMaxQuery(req.query.drivingDuration);
             var max = drivingDuration.max ? drivingDuration.max : drivingDuration.min;
-            query = addDrivingDurationCondition(clientLoc, max, query);
+            query = addDrivingDurationCondition(userLoc, max, query);
         }
 
-        console.log(ip);
-        console.log(clientLoc);
+        console.log(userIp);
+        console.log(userLoc);
         console.log(JSON.stringify(query,null,2));
 
         async.waterfall([
@@ -173,7 +296,7 @@ module.exports = function (app, db) {
                 _this.db.find({
                     schema: 'hike',
                     query: query,
-                    limit: 50,
+                    limit: req.query.limit || 20,
                     skip: req.query.skip,
                     lean: true
                 })
@@ -191,13 +314,24 @@ module.exports = function (app, db) {
             function(hikes, callback){
 
                 // Call Google and get driving directions.
-                callback(null, hikes);
+                getDrivingDistance(hikes, userIp, userLoc, function(err, hikes){
+                    // Ignore errors from Google Maps. Its okie
+                    if (err) {
+                        console.log("Google API returned error: ");
+                        console.error(err);
+                        return callback(null, hikes);
+                    }
 
+                    hikes = filterByDrivingDuration(hikes, drivingDuration);
+                    console.log(hikes.length + " hikes after filter");
+                    callback(null, hikes);
+                })
             },
 
             function(hikes, callback){
                 // Add more data points for search results page to display
                 addDifficultyDataToResults(hikes);
+                addHikeLocationStr(hikes);
                 callback(null, hikes);
             }
         ],

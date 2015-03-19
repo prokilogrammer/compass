@@ -1,31 +1,33 @@
 //- search result
-#search-results
+- each hike in hikes
+    .hike
+        //- top portion
+        .img(style='background-image: url(#{hike.imgurl});')
+            .bg
+            h1 #{hike.name}
+            //.location #{hike.locationStr}
+            .difficulty
+                div.numerical #{hike.difficultyNumber}<sup>/5</sup>
+                div.description #{hike.difficultyText}
+            ul
+                li
+                    .i-map Distance
+                    .detail #{hike.googleMapsResults.durationText || hike.straightLineDistance + " mi"}
+                li
+                    .i-length Length
+                    .detail #{hike.length} mi
+                li
+                    .i-gain Gain
+                    .detail #{hike.elevGain} ft
+        //- hike content
+        .content
+            //- hike description
+            h3 #{hike.name}
+            p #{hike.desc || "no description"}
+            //- driving directions
+            h3 Directions
+            p #{hike.drivingDirections}
+            h3
+            p
+                a(href="https://maps.google.com?daddr=#{hike.locationStr}") ROUTE
 
-    - each hike in hikes
-        .hike
-            //- top portion
-            .img(style='background-image: url(#{hike.imgurl});')
-                .bg
-                h1 #{hike.name}
-                //.location #{hike.locationStr}
-                .difficulty
-                    div.numerical #{hike.difficultyNumber}<sup>/5</sup>
-                    div.description #{hike.difficultyText}
-                ul
-                    li
-                        .i-map Distance
-                        .detail #{hike.drivingDuration}
-                    li
-                        .i-length Length
-                        .detail #{hike.length} mi
-                    li
-                        .i-gain Gain
-                        .detail #{hike.elevGain} ft
-            //- hike content
-            .content
-                //- hike description
-                h3 #{hike.name}
-                p #{hike.desc || "no description"}
-                //- driving directions
-                h3 Directions
-                p #{hike.drivingDirections}

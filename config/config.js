@@ -9,7 +9,8 @@ var config = {
       name: 'compass'
     },
     port: 3000,
-    db: 'mongodb://localhost/compass-development'
+    db: 'mongodb://localhost/compass-development',
+    googleApiKey: "AIzaSyAYpKMEph6yhHUgQdw0K75NY51UB_vIeaQ"
   },
 
   test: {
@@ -18,7 +19,8 @@ var config = {
       name: 'compass'
     },
     port: 3000,
-    db: 'mongodb://localhost/compass-test'
+    db: 'mongodb://localhost/compass-test',
+    googleApiKey: "AIzaSyAYpKMEph6yhHUgQdw0K75NY51UB_vIeaQ"
   },
 
   production: {
@@ -27,7 +29,8 @@ var config = {
       name: 'compass'
     },
     port: 3000,
-    db: 'mongodb://localhost/compass-production'
+    db: 'mongodb://localhost/compass-production',
+    googleApiKey: "AIzaSyAYpKMEph6yhHUgQdw0K75NY51UB_vIeaQ"
   }
 };
 
