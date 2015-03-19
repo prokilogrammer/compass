@@ -26,7 +26,7 @@ module.exports = function (app, db) {
 
     // Avg hiking speed: 3.1mph
     // Easy hikes are 2hrs round trip = 3.1*2 = 6.2miles flat
-    // medium hikes are 2 to 6hrs round trip => 6.2miles to 6*3.1 = 18.6miles
+    // moderate hikes are 2 to 6hrs round trip => 6.2miles to 6*3.1 = 18.6miles
     // hard hikes are >6hrs round trip => > 18.6miles
     var addDifficultyCondition = function(difficulty, query){
 
@@ -35,7 +35,7 @@ module.exports = function (app, db) {
                 query['meta.estFlatDistance'] = {$lte: 6.2};
                 break;
 
-            case "medium":
+            case "moderate":
                 query['meta.estFlatDistance'] = {$gt: 6.2, $lte: 18.6};
                 break;
 
@@ -73,7 +73,7 @@ module.exports = function (app, db) {
 
 
                 if (flat < 6.2) diffText = 'easy'
-                else if (flat < 18.6) diffText = 'medium'
+                else if (flat < 18.6) diffText = 'moderate'
                 else diffText = 'hard';
 
                 hike.difficultyNumber = diffNum;
