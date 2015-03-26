@@ -147,12 +147,14 @@ table {
   border-spacing: 0;
 }
 #search fieldset input[type=radio] + label,
+#search .more-options-toggle,
 nav ul li,
 .hike .img {
   cursor: pointer;
   -webkit-tap-highlight-color: rgba(0,0,0,0);
 }
-#search fieldset .name,
+#search .name,
+#search .more-options-toggle,
 .hike .img .location,
 .hike .img ul li [class^="i-"],
 .hike .img ul li [class*=" i-"] {
@@ -176,7 +178,7 @@ p,
 h2,
 h3,
 button {
-  font-size: 1.3125em;
+  font-size: 1.125em;
   font-weight: 300;
   line-height: 1.2;
 }
@@ -240,8 +242,10 @@ form label {
 }
 form [type=submit] {
   width: 110%;
+  margin-top: 0.75em;
   margin-left: -5%;
-  padding: 0.75em 1em;
+  padding: 0.75em 1em 0.8125em;
+  text-transform: uppercase;
   color: #fff;
 }
 input,
@@ -255,8 +259,7 @@ textarea {
 }
 button {
   margin: 0 auto;
-  padding: 0.5em 0.75em;
-  text-transform: uppercase;
+  padding: 0.75em 1em;
   color: inherit;
   border: none;
   background: none;
@@ -348,7 +351,6 @@ main {
   bottom: 0;
   left: 0;
   height: 100%;
-  padding: 0 4%;
   overflow-x: hidden;
   background: url("../img/bg.jpg") center/cover fixed;
   transition: 0.75s ease-out 0s;
@@ -358,7 +360,7 @@ main .overlay {
   right: 0;
   bottom: 0;
   left: 0;
-  height: 3.5em;
+  height: 3em;
   background: #92f000;
 }
 main.searching {
@@ -369,9 +371,9 @@ main.searching .overlay {
   height: 100%;
   transition: 0.75s ease-out;
 }
-main.searching #logo {
+main.searching #logo .i-logo {
   opacity: 0;
-  top: -1em;
+  margin-top: 0;
   transition-delay: 0;
 }
 main.searching #search {
@@ -379,31 +381,44 @@ main.searching #search {
   transition: 0.25s;
 }
 #logo {
-  position: relative;
+  position: absolute;
+  z-index: -10;
   top: 0;
-  margin-top: 5%;
-  color: #fff;
-  transition: 1s 0.25s;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background: rgba(255,255,255,0.9);
+  border: 0.5em solid #393f44;
 }
 #logo .i-logo {
-  font-size: 14em;
+  margin-top: 10%;
+  font-size: 12em;
   text-align: center;
+  color: #393f44;
+  transition: 1s;
 }
 #logo .i-logo:before {
   margin: 0;
 }
-#search {
+#logo.open-options .i-logo {
+  margin-top: 0;
   color: #fff;
+  opacity: 0.5;
+  transition-delay: 0.25s 0s;
+}
+#search {
   position: absolute;
   bottom: 0;
   left: 4%;
   right: 4%;
 }
-#search fieldset {
-  margin: 0em auto 1em;
+#search .name {
+  margin: 0.75em auto;
 }
-#search fieldset .name {
-  margin-bottom: 0.75em;
+#search fieldset {
+  margin-bottom: 1.25em;
+  padding: 0.125em;
+  border: 1px solid #393f44;
 }
 #search fieldset input[type=radio] {
   display: none;
@@ -413,24 +428,31 @@ main.searching #search {
   float: left;
   width: 24%;
   text-align: center;
-  margin: 0 0.5% 1em;
   padding: 0.5em;
-  background-color: #252b30;
   outline: none;
-}
-#search fieldset input[type=radio] + label:first-of-type {
-  border-radius: 0.25em 0 0 0.25em;
-}
-#search fieldset input[type=radio] + label:last-of-type {
-  border-radius: 0 0.25em 0.25em 0;
+  transition: 0.25s;
 }
 #search fieldset input[type=radio]:checked + label {
-  color: #393f44;
-  background: #fff;
-}
-#search fieldset input[type=radio]:checked + label[for*="all"] {
   color: #fff;
   background: #626d6f;
+}
+#search fieldset input[type=radio]:checked + label[for*="all"] {
+  background: #bec1b8;
+}
+#search .more-options-toggle {
+  position: relative;
+  margin-top: -0.5em;
+  padding: 0.375em 1em;
+  text-align: center;
+  color: #bec1b8;
+  transition: 0.5s;
+}
+#search .more-options-toggle:hover,
+#search .more-options-toggle:focus {
+  color: #393f44;
+}
+#search .more-options {
+  display: none;
 }
 nav {
   position: fixed;

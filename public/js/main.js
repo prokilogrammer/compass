@@ -1,5 +1,12 @@
 $(document).ready(function() {
 
+	// toggle more options
+	$('main .more-options-toggle').on('click', function() {
+		$('#logo').toggleClass('open-options');
+		$('main .more-options').slideToggle(500);
+		$(this).html($(this).html() == '[ Hide Options ]' ? '[ More Options ]' : '[ Hide Options ]');
+	});
+
 	// search for hikes
 	$('main [type=submit]').on('click', function() {
 		event.preventDefault();

@@ -13,12 +13,13 @@ $dark = #252b30
 $min-desktop = "only screen and (min-width: " + em(600) + ")"
 
 // z-indexes
-$z-main = 100
+$z-logo = -10
 $z-nav = 80
+$z-main = 100
 
 // type	
 $f-xs //details
-	font-size em(12)
+	font-size em(12) 
 	font-weight 300
 	line-height 1.2
 	
@@ -33,7 +34,7 @@ $f-r //body
 	line-height 1.4
 	
 $f-h2
-	font-size em(21)
+	font-size em(18)
 	font-weight 300
 	line-height 1.2
 	
@@ -100,8 +101,10 @@ form
 		color inherit
 	[type=submit]
 		width 110%
+		margin-top .75em
 		margin-left -5%
-		padding em(12) 1em
+		padding em(12) 1em em(13)
+		text-transform uppercase
 		color $white
 
 input, textarea
@@ -115,8 +118,7 @@ input, textarea
 button
 	@extend $f-h2
 	margin 0 auto
-	padding .5em .75em
-	text-transform uppercase
+	padding .75em 1em
 	color inherit
 	border none
 	background none
@@ -231,7 +233,6 @@ main
 	bottom 0
 	left 0
 	height 100%
-	padding 0 4% //same as body border-top
 	overflow-x hidden
 	background url(../img/bg.jpg) center / cover fixed
 	transition .75s ease-out 0s
@@ -240,7 +241,7 @@ main
 		right 0
 		bottom 0
 		left 0
-		height em(56)
+		height 3em
 		background $main
 	
 	// transition animations
@@ -251,38 +252,51 @@ main
 		.overlay
 			height 100%
 			transition .75s ease-out //same time as main-delay
-		#logo
+		#logo .i-logo
 			  opacity 0
-			  top -1em
+			  margin-top 0
 			  transition-delay 0
 		#search
 			opacity 0
 			transition .25s
 
 #logo
-	position relative
+	position absolute
+	z-index $z-logo
 	top 0
-	margin-top 5%
-	color $white
-	transition 1s .25s
+	right 0
+	bottom 0
+	left 0
+	background alpha($white,.9)
+	border em(8) solid $black
 	.i-logo
-		font-size 14em
+		margin-top 10%
+		font-size 12em
 		text-align center
+		color $black
+		transition 1s
 		&:before
 			margin 0
+	&.open-options
+		.i-logo
+			margin-top 0
+			color $white
+			opacity .5
+			transition-delay .25s 0s
 		
 	
 #search
-	color $white
 	position absolute
 	bottom 0
 	left 4%
 	right @left
+	.name
+		@extend $f-xs
+		margin em(12) auto
 	fieldset
-		margin em(0) auto em(16)
-		.name
-			@extend $f-xs
-			margin-bottom em(12)
+		margin-bottom 1.25em
+		padding em(2)
+		border 1px solid $black
 		input[type=radio]
 			display none
 			+ label
@@ -292,20 +306,27 @@ main
 				float left
 				width 24%
 				text-align center
-				margin 0 .5% 1em
 				padding em(8)
-				background-color $dark
 				outline none
-				&:first-of-type
-					border-radius em(4) 0 0 em(4)
-				&:last-of-type
-					border-radius 0 em(4) em(4) 0
+				transition .25s
 			&:checked + label
-				color $black
-				background $white
-			&:checked + label[for*="all"]
 				color $white
 				background $grey-dark
+			&:checked + label[for*="all"]
+				background $grey-light
+	.more-options-toggle
+		@extend $f-xs
+		@extend $cursor
+		position relative
+		margin-top -.5em
+		padding em(6) 1em
+		text-align center
+		color $grey-light
+		transition .5s
+		&:hover, &:focus
+			color $black
+	.more-options
+		display none
 
 // search results nav
 nav
@@ -429,7 +450,7 @@ nav
 			position absolute
 			bottom 0
 			left 0
-			right 0
+			right 0 
 			background alpha($black,.9)
 			transition background 1s
 			li
@@ -476,4 +497,4 @@ nav
 			transition 1s ease-out
 		p
 			transform translateY(1em)
-			transition transform 1s ease-out
+			transition transform 1s ease-out 
