@@ -175,7 +175,7 @@ module.exports = function (app, db) {
     var getDrivingDistance = function(hikes, userIp, userLoc, callback){
         // All hikes will have lat/lng data
 
-        if (!userLoc) return callback(null, hikes);
+        if (!userLoc || !hikes || hikes.length == 0) return callback(null, hikes);
 
         hikes = addStraightLineDistance(hikes, userLoc);
 
@@ -302,6 +302,7 @@ module.exports = function (app, db) {
                     query: query,
                     limit: req.query.limit || 20,
                     skip: req.query.skip,
+                    sort: req.query.sort || 'numTripReports',  // Default sort is populartiy
                     lean: true
                 })
                     .on('data', function(d){
@@ -337,6 +338,29 @@ module.exports = function (app, db) {
                 addDifficultyDataToResults(hikes);
                 addHikeLocationStr(hikes);
                 callback(null, hikes);
+            },
+
+            function(hikes, callback){
+
+                // Sort as necessary
+                var sortParam = req.query.sort;
+                if (sortParam == 'drivingDuration'){
+                    hikes = _.sortBy(hikes, function(d){
+                       return d.googleMapsResults.durationSeconds;
+                    })
+                }
+                else if (sortParam == 'length'){
+                    hikes = _.sortBy(hikes, function(d){
+                       return d.length;
+                    })
+                }
+                else if (sortParam == 'elevGain'){
+                    hikes = _.sortBy(hikes, function(d){
+                        return d.elevGain;
+                    })
+                }
+
+                callback(null, hikes);
             }
         ],
         function(err, hikes){
@@ -344,8 +368,14 @@ module.exports = function (app, db) {
                 return next(err)
             }
 
+            // Next page link for pagination
+            var query = _.clone(req.query);
+            query.skip = query.skip ? _.parseInt(query.skip) + 20 : 20;
+            var nextPageUrl = "/search-results?" + querystring.stringify(query);
+
             res.render('search-results', {
-                hikes: hikes
+                hikes: hikes,
+                nextPageUrl: nextPageUrl
             });
         });
 

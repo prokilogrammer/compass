@@ -45,6 +45,8 @@ module.exports = function(config){
 
         if (!utils.isValid(params.schema)) {return cb(new Error("Missing params - " + JSON.stringify(params)))}
 
+        console.log(JSON.stringify(params,null,2));
+
         var model = _this.models[params.schema];
         var queryStream = model
             .find(params.query || {})

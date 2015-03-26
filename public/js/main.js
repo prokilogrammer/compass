@@ -20,18 +20,22 @@ $(document).ready(function() {
 		var length = $('#search [name=length]:checked').val();
 		var elevGain = $('#search [name=elevGain]:checked').val();
 
-		// AJAX results into #search-results container
-		$.get('/search-results', {
-			difficulty: difficulty,
-			drivingDuration: drivingDuration,
-			length: length,
-			elevGain: elevGain
-		}, function(data, textStatus, xhr) {
+      $.get('/search-results', {
+        difficulty: difficulty,
+        drivingDuration: drivingDuration,
+        length: length,
+        elevGain: elevGain,
+        limit: 20
+      }, function(data, textStatus, xhr) {
 
-			$('#search-results').append(data);
+        $('#search-results').append(data);
 
-		});
+        var infinite = new Waypoint.Infinite({
+            element: $('#search-results')[0],
+            items: '.hike'
+        })
 
+      });
 	});
 
 	// sort hikes

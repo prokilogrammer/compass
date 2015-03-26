@@ -34,3 +34,5 @@
             p
                 a(href="https://maps.google.com?daddr=#{hike.locationStr}") ROUTE
 
+if hikes.length
+    a.infinite-more-link(href="#{nextPageUrl}")
